@@ -14,6 +14,9 @@ const loadMoreBtn = document.querySelector('.load-more-btn');
 
 hideLoadMoreBtn();
 
+let page = 1;
+const perPage = 15;
+let userSearch;
 //=========Form-Input===========================
 
 formElem.addEventListener('submit', async e => {
@@ -96,19 +99,15 @@ function showLoadMoreBtn() {
 }
 
 //========================================
-let page = 1;
-const perPage = 15;
-let userSearch;
 
 loadMoreBtn.addEventListener('click', async e => {
   showLoader();
 
   page += 1;
-
   const data = await getPhotos(userSearch, page);
 
   renderMarkup(imageEl, data.hits);
-
+  scrollBtn();
   const lastPage = Math.ceil(data.totalHits / perPage);
 
   if (page === lastPage) {
@@ -126,3 +125,12 @@ loadMoreBtn.addEventListener('click', async e => {
 });
 
 //=========FUNCTION-SCROLL=======================
+function scrollBtn() {
+  const cardHeight = document
+    .querySelector('.gallery-item')
+    .getBoundingClientRect().height;
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}

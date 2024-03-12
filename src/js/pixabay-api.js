@@ -6,7 +6,7 @@ const API_KEY = '42814531-6217cd85928bc5270423ce53d';
 let page = 1;
 const perPage = 15;
 
-export async function getPhotos(q) {
+export async function getPhotos(q, page, perPage) {
   const params = {
     key: API_KEY,
     q,
