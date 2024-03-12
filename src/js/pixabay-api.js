@@ -8,7 +8,7 @@ let perPage = 15;
 let totalHits = 0;
 const lastPage = Math.ceil(totalHits / perPage);
 
-export async function getPhotos(q) {
+export async function getPhotos(q, page, perPage) {
   const params = {
     key: API_KEY,
     q,

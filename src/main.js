@@ -4,11 +4,7 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import axios from 'axios';
 
-import {
-  renderMarkup,
-  refreshLightBox,
-  imageTemplate,
-} from './js/render-function';
+import { renderMarkup, refreshLightBox } from './js/render-function';
 import { getPhotos } from './js/pixabay-api';
 
 const formElem = document.querySelector('.search-form');
@@ -99,7 +95,8 @@ const lastPage = Math.ceil(totalHits / perPage);
 
 loadMoreBtn.addEventListener('click', async e => {
   page += 1;
-  const data = await getPhotos(userSearch, page);
+
+  const data = await getPhotos(page);
 
   renderMarkup(imageEl, data.hits);
 
