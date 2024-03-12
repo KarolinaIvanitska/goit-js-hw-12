@@ -29,7 +29,6 @@ formElem.addEventListener('submit', async e => {
 
   if (userSearch === '') {
     hideLoader();
-    hideLoadMoreBtn();
     iziToast.warning({
       titleColor: '#fff',
       messageColor: '#fff',
@@ -40,7 +39,7 @@ formElem.addEventListener('submit', async e => {
     return;
   }
   showLoader();
-  showLoadMoreBtn();
+  showLoadMoreBtn();/
   try {
     const data = await getPhotos(userSearch, page);
     if (data.hits.length === 0) {
@@ -56,10 +55,6 @@ formElem.addEventListener('submit', async e => {
         position: 'topRight',
       });
       return;
-    }
-
-    if (data.totalHits > perPage) {
-      showLoadMoreBtn();
     }
 
     renderMarkup(imageEl, data.hits);
