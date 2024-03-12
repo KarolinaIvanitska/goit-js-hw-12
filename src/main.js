@@ -39,7 +39,7 @@ formElem.addEventListener('submit', async e => {
     return;
   }
   showLoader();
-  showLoadMoreBtn();/
+  showLoadMoreBtn();
   try {
     const data = await getPhotos(userSearch, page);
     if (data.hits.length === 0) {
