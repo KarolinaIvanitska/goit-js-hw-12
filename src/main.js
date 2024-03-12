@@ -88,18 +88,14 @@ function showLoadMoreBtn() {
 //========================================
 let page = 1;
 let perPage = 15;
-let UserSearch;
 let totalHits = 0;
 const lastPage = Math.ceil(totalHits / perPage);
 //========================================
 
 loadMoreBtn.addEventListener('click', async e => {
   page += 1;
-
   const data = await getPhotos(page);
-
   renderMarkup(imageEl, data.hits);
-
   const lastPage = Math.ceil(totalHits / perPage);
 
   if (lastPage === page) {
