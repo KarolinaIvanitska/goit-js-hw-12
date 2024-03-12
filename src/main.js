@@ -25,6 +25,8 @@ formElem.addEventListener('submit', async e => {
   const userSearch = e.target.elements.search.value.trim();
 
   if (userSearch === '') {
+    hideLoader();
+    hideLoadMoreBtn();
     iziToast.warning({
       titleColor: '#fff',
       messageColor: '#fff',
@@ -34,14 +36,14 @@ formElem.addEventListener('submit', async e => {
     });
     return;
   }
-
   showLoader();
-
+  showLoadMoreBtn();
   try {
     const data = await getPhotos(userSearch, page);
     if (data.hits.length === 0) {
       hideLoadMoreBtn();
-      return iziToast.error({
+      hideLoader();
+      iziToast.error({
         title: 'Error',
         titleColor: '#fff',
         messageColor: '#fff',
@@ -50,21 +52,22 @@ formElem.addEventListener('submit', async e => {
           'Sorry, there are no images matching your search query. Please try again!',
         position: 'topRight',
       });
+      return;
+    }
+
+    if (data.totalHits > perPage) {
+      showLoadMoreBtn();
     }
 
     renderMarkup(imageEl, data.hits);
   } catch (error) {
     console.log(error);
-  } finally {
-    hideLoader();
-    showLoadMoreBtn();
   }
-
+  hideLoader();
   e.target.reset();
 });
 
 //=========LOADER=============================
-
 function showLoader() {
   if (loader) {
     loader.style.display = 'block';
@@ -77,6 +80,7 @@ function hideLoader() {
   }
 }
 
+document.addEventListener('DOMContentLoaded', hideLoader);
 //============BTN-LOAD-MORE==================
 
 function hideLoadMoreBtn() {
@@ -93,9 +97,7 @@ function showLoadMoreBtn() {
 
 //========================================
 let page = 1;
-let perPage = 15;
-let totalHits;
-//========================================
+const perPage = 15;
 let userSearch;
 
 loadMoreBtn.addEventListener('click', async e => {
@@ -107,7 +109,7 @@ loadMoreBtn.addEventListener('click', async e => {
 
   renderMarkup(imageEl, data.hits);
 
-  const lastPage = Math.ceil(totalHits / perPage);
+  const lastPage = Math.ceil(data.totalHits / perPage);
 
   if (page === lastPage) {
     hideLoadMoreBtn();
@@ -122,3 +124,5 @@ loadMoreBtn.addEventListener('click', async e => {
   }
   hideLoader();
 });
+
+//=========FUNCTION-SCROLL=======================
