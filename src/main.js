@@ -4,7 +4,7 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import axios from 'axios';
 
-import { renderMarkup, refreshLightBox } from './js/render-function';
+import { renderMarkup } from './js/render-function';
 import { getPhotos } from './js/pixabay-api';
 
 const formElem = document.querySelector('.search-form');
@@ -14,12 +14,13 @@ const loadMoreBtn = document.querySelector('.load-more-btn');
 
 hideLoadMoreBtn();
 
+//=========Form-Input===========================
+
 formElem.addEventListener('submit', async e => {
   e.preventDefault();
-
   imageEl.innerHTML = '';
+
   page = 1;
-  showLoadMoreBtn();
 
   const userSearch = e.target.elements.search.value.trim();
 
@@ -33,10 +34,13 @@ formElem.addEventListener('submit', async e => {
     });
     return;
   }
+
   showLoader();
+
   try {
     const data = await getPhotos(userSearch, page);
     if (data.hits.length === 0) {
+      hideLoadMoreBtn();
       return iziToast.error({
         title: 'Error',
         titleColor: '#fff',
@@ -47,13 +51,15 @@ formElem.addEventListener('submit', async e => {
         position: 'topRight',
       });
     }
+
     renderMarkup(imageEl, data.hits);
-    refreshLightBox();
   } catch (error) {
     console.log(error);
   } finally {
     hideLoader();
+    showLoadMoreBtn();
   }
+
   e.target.reset();
 });
 
@@ -88,18 +94,23 @@ function showLoadMoreBtn() {
 //========================================
 let page = 1;
 let perPage = 15;
-let totalHits = 0;
-const lastPage = Math.ceil(totalHits / perPage);
+let totalHits;
 //========================================
+let userSearch;
 
 loadMoreBtn.addEventListener('click', async e => {
+  showLoader();
+
   page += 1;
-  const data = await getPhotos(page);
+
+  const data = await getPhotos(userSearch, page);
+
   renderMarkup(imageEl, data.hits);
+
   const lastPage = Math.ceil(totalHits / perPage);
 
-  if (lastPage === page) {
-    showLoadMoreBtn();
+  if (page === lastPage) {
+    hideLoadMoreBtn();
     iziToast.error({
       title: 'Error',
       titleColor: '#fff',
@@ -109,4 +120,5 @@ loadMoreBtn.addEventListener('click', async e => {
       position: 'topRight',
     });
   }
+  hideLoader();
 });

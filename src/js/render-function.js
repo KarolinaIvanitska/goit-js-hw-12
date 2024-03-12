@@ -44,10 +44,7 @@ export function imagesTemplate(arr) {
   return arr.map(imageTemplate).join('');
 }
 
-export function renderMarkup(image, arr) {
+export function renderMarkup(imageEl, arr) {
   imageEl.insertAdjacentHTML('beforeend', imagesTemplate(arr));
-}
-
-export function refreshLightBox() {
   lightbox.refresh();
 }

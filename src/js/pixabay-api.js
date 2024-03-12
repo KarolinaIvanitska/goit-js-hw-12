@@ -5,10 +5,8 @@ const API_KEY = '42814531-6217cd85928bc5270423ce53d';
 
 let page = 1;
 let perPage = 15;
-let totalHits = 0;
-const lastPage = Math.ceil(totalHits / perPage);
 
-export async function getPhotos(q, page, perPage) {
+export async function getPhotos(q) {
   const params = {
     key: API_KEY,
     q,
