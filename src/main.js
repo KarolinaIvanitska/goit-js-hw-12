@@ -17,6 +17,7 @@ hideLoadMoreBtn();
 let page = 1;
 const perPage = 15;
 let userSearch;
+
 //=========Form-Input===========================
 
 formElem.addEventListener('submit', async e => {
@@ -25,7 +26,7 @@ formElem.addEventListener('submit', async e => {
 
   page = 1;
 
-  const userSearch = e.target.elements.search.value.trim();
+  userSearch = e.target.elements.search.value.trim();
 
   if (userSearch === '') {
     hideLoader();
@@ -39,11 +40,9 @@ formElem.addEventListener('submit', async e => {
     return;
   }
   showLoader();
-  showLoadMoreBtn();
   try {
     const data = await getPhotos(userSearch, page);
     if (data.hits.length === 0) {
-      hideLoadMoreBtn();
       hideLoader();
       iziToast.error({
         title: 'Error',
@@ -55,6 +54,12 @@ formElem.addEventListener('submit', async e => {
         position: 'topRight',
       });
       return;
+    }
+
+    if (data.totalHits < perPage) {
+      hideLoadMoreBtn();
+    } else {
+      showLoadMoreBtn();
     }
 
     renderMarkup(imageEl, data.hits);
@@ -97,13 +102,12 @@ function showLoadMoreBtn() {
 
 loadMoreBtn.addEventListener('click', async e => {
   showLoader();
-
   page += 1;
   const data = await getPhotos(userSearch, page);
+  const lastPage = Math.ceil(data.totalHits / perPage);
 
   renderMarkup(imageEl, data.hits);
   scrollBtn();
-  const lastPage = Math.ceil(data.totalHits / perPage);
 
   if (page === lastPage) {
     hideLoadMoreBtn();
