@@ -30,6 +30,7 @@ formElem.addEventListener('submit', async e => {
 
   if (userSearch === '') {
     hideLoader();
+    hideLoadMoreBtn();
     iziToast.warning({
       titleColor: '#fff',
       messageColor: '#fff',
@@ -44,6 +45,7 @@ formElem.addEventListener('submit', async e => {
     const data = await getPhotos(userSearch, page);
     if (data.hits.length === 0) {
       hideLoader();
+      hideLoadMoreBtn();
       iziToast.error({
         title: 'Error',
         titleColor: '#fff',

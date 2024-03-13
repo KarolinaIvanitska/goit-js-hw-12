@@ -10,7 +10,7 @@ export async function getPhotos(q, page) {
     key: API_KEY,
     q,
     page,
-    _limit: perPage,
+    perPage,
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: true,
