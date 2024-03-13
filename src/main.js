@@ -64,8 +64,16 @@ formElem.addEventListener('submit', async e => {
 
     renderMarkup(imageEl, data.hits);
   } catch (error) {
-    console.log(error);
+    iziToast.error({
+      title: 'Error',
+      titleColor: '#fff',
+      messageColor: '#fff',
+      backgroundColor: '#ef4040',
+      message: 'Error',
+      position: 'topRight',
+    });
   }
+
   hideLoader();
   e.target.reset();
 });
